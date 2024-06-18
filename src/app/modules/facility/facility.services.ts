@@ -2,7 +2,7 @@ import IFacility from "./facility.interface";
 import { Facility } from "./facility.model";
 
 const getAllFacility = async () => {
-  const result = await Facility.find().lean();
+  const result = await Facility.find({ isDeleted: false });
   return result;
 };
 

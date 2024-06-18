@@ -57,7 +57,6 @@ const createBooking = (token, payload) => __awaiter(void 0, void 0, void 0, func
     const pricePerHour = yield facility_model_1.Facility.find({ _id: payload.facility }).select("pricePerHour");
     const payableAmount = (((end - start) / (1000 * 60 * 60)) % 24) * pricePerHour[0].pricePerHour;
     const booking = Object.assign(Object.assign({}, payload), { user: userId._id, payableAmount: payableAmount, isBooked: "confirmed" });
-    console.log(pricePerHour);
     // checking time conflict
     const assignedSchedules = yield booking_model_1.Booking.find({
         date,
@@ -93,7 +92,7 @@ const cancelBooking = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const checkAvailability = (date) => __awaiter(void 0, void 0, void 0, function* () {
-    const bookings = yield booking_model_1.Booking.find({ date });
+    const bookings = yield booking_model_1.Booking.find({ date, isBooked: "confirmed" });
     if (!bookings) {
         return {
             startTime: "0:00",

@@ -30,6 +30,7 @@ const availability = (booked: any) => {
         startTime: start.toString().padStart(2, "0") + ":00",
         endTime: end.toString().padStart(2, "0") + ":00",
       });
+
       start = end = available[i];
     }
   }

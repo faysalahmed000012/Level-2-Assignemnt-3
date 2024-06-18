@@ -33,6 +33,6 @@ const auth_controller_1 = require("./auth.controller");
 const auth_zod_validation_1 = __importStar(require("./auth.zod.validation"));
 const router = (0, express_1.Router)();
 router.post("/signup", (0, validateRequest_1.default)(auth_zod_validation_1.default), auth_controller_1.AuthControllers.createUser);
-router.get("/login", auth_controller_1.AuthControllers.Login);
+router.post("/login", auth_controller_1.AuthControllers.Login);
 router.post("/refresh-token", (0, validateRequest_1.default)(auth_zod_validation_1.refreshTokenValidationSchema), auth_controller_1.AuthControllers.refreshToken);
 exports.AuthRoutes = router;

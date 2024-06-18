@@ -13,7 +13,7 @@ router.post(
   AuthControllers.createUser
 );
 
-router.get("/login", AuthControllers.Login);
+router.post("/login", AuthControllers.Login);
 
 router.post(
   "/refresh-token",

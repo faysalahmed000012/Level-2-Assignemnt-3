@@ -41,3 +41,26 @@ Please follow the below instructions to run different branches of this repositor
 - Book Facility (cancel anytime)
 - See Your Booking
 - User Authentication and Authorization
+
+## Application Routes
+
+Authentication:
+
+- POST /api/auth/signup --> To sign up.
+- GET /api/auth/login --> For user login.
+- POST /api/auth/refresh-token --> To get a new access token.
+
+Facility:
+
+- GET /api/facility --> To get all facility.
+- POST /api/facility (Admin Only) --> To create a facility.
+- PUT /api/facility/:id (Admin Only) --> To update a facility.
+- DELETE /api/facility/:id (Admin Only) --> To soft delete a facility.
+
+Booking:
+
+- POST /api/bookings (User Only) --> To book a facility.
+- GET /api/bookings (Admin Only) --> To see all bookings.
+- GET /api/bookings/user (User Only) --> To see bookings that user made.
+- DELETE /api/bookings/:id (User Only) --> To cancel a booking.
+- GET /api/check-availability?date=YYYY-MM-DD --> To see available slots of that day.

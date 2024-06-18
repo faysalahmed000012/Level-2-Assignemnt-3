@@ -38,7 +38,14 @@ const Login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
         statusCode: 200,
         message: "User logged in successfully",
         token: accessToken,
-        data: result.user,
+        data: {
+            _id: result.user._id,
+            name: result.user.name,
+            email: result.user.email,
+            role: result.user.role,
+            phone: result.user.phone,
+            address: result.user.address,
+        },
     });
 }));
 const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

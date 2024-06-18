@@ -32,7 +32,6 @@ const createBooking = async (token: string, payload: Partial<IBooking>) => {
     payableAmount: payableAmount,
     isBooked: "confirmed",
   };
-  console.log(pricePerHour);
 
   // checking time conflict
   const assignedSchedules = await Booking.find({
@@ -84,7 +83,7 @@ const cancelBooking = async (id: string) => {
 };
 
 const checkAvailability = async (date: any) => {
-  const bookings = await Booking.find({ date });
+  const bookings = await Booking.find({ date, isBooked: "confirmed" });
 
   if (!bookings) {
     return {

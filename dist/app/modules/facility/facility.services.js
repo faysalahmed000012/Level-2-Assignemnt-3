@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FacilityServices = void 0;
 const facility_model_1 = require("./facility.model");
 const getAllFacility = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield facility_model_1.Facility.find().lean();
+    const result = yield facility_model_1.Facility.find({ isDeleted: false });
     return result;
 });
 const createFacility = (facility) => __awaiter(void 0, void 0, void 0, function* () {
