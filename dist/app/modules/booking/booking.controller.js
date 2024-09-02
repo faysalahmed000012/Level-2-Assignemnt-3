@@ -23,6 +23,7 @@ const createBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     }
     const booking = req.body;
     const result = yield booking_services_1.BookingServices.createBooking(token, booking);
+    // console.log(result);
     res.status(201).json({
         success: true,
         statusCode: 201,
@@ -80,7 +81,9 @@ const cancelBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 }));
 const checkAvailability = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const date = req.query.date || new Date().toISOString().slice(0, 10);
-    const result = yield booking_services_1.BookingServices.checkAvailability(date);
+    const id = req.query.facility;
+    console.log(req.query);
+    const result = yield booking_services_1.BookingServices.checkAvailability(date, id);
     if (result.length === 0) {
         res.status(400).json({
             success: false,

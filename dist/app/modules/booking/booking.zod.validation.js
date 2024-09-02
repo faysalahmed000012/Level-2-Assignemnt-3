@@ -5,8 +5,8 @@ const bookingValidationSchema = zod_1.z.object({
     body: zod_1.z
         .object({
         date: zod_1.z.string().min(1, "Date is required"),
-        startTime: zod_1.z.string().min(1, "Start time is required"),
-        endTime: zod_1.z.string().min(1, "End time is required"),
+        startTime: zod_1.z.string(),
+        endTime: zod_1.z.string(),
         user: zod_1.z.string().optional(),
         facility: zod_1.z.string().min(1, "Facility is required"),
         payableAmount: zod_1.z.number().optional(),

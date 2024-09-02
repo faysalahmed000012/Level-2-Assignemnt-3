@@ -16,8 +16,8 @@ exports.FacilityControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const facility_services_1 = require("./facility.services");
 const getAllFacility = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const facilities = yield facility_services_1.FacilityServices.getAllFacility();
-    if (facilities.length === 0) {
+    const facilities = yield facility_services_1.FacilityServices.getAllFacility(req.query);
+    if (!facilities) {
         res.status(400).json({
             success: false,
             statusCode: 404,
@@ -29,6 +29,23 @@ const getAllFacility = (req, res) => __awaiter(void 0, void 0, void 0, function*
         success: true,
         message: "All Facility Retrieved successfully",
         data: facilities,
+    });
+});
+const getFacilityById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const facility = yield facility_services_1.FacilityServices.getFacilityById(id);
+    if (!facility) {
+        res.status(400).json({
+            success: false,
+            statusCode: 404,
+            message: "No Data Found",
+            data: [],
+        });
+    }
+    res.status(200).json({
+        success: true,
+        message: "Facility Retrieved successfully",
+        data: facility,
     });
 });
 const createFacility = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,6 +81,7 @@ const deleteFacility = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 }));
 exports.FacilityControllers = {
     getAllFacility,
+    getFacilityById,
     createFacility,
     updateFacility,
     deleteFacility,

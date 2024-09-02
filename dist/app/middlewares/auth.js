@@ -26,7 +26,13 @@ const auth = (...requiredRoles) => {
         }
         const tokenArray = token === null || token === void 0 ? void 0 : token.split(" ");
         // checking if the given token is valid
-        const decoded = jsonwebtoken_1.default.verify(tokenArray[1], config_1.default.jwt_access_secret);
+        let decoded;
+        try {
+            decoded = jsonwebtoken_1.default.verify(tokenArray[1], config_1.default.jwt_access_secret);
+        }
+        catch (error) {
+            throw new AppError_1.default(401, "Unauthorized");
+        }
         const { email, role } = decoded;
         // checking if the user is exist
         const user = yield auth_model_1.User.findOne({ email }).select("+password");

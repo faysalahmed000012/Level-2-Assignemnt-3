@@ -51,6 +51,10 @@ const bookingSchema = new mongoose_1.Schema({
         type: Number,
         required: false,
     },
+    tranId: {
+        type: String,
+        required: true,
+    },
     isBooked: {
         type: String,
         required: false,

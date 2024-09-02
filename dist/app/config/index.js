@@ -15,4 +15,7 @@ exports.default = {
     jwt_refresh_secret: process.env.JWT_REFRESHTOKEN_SECRET,
     jwt_access_expires_in: process.env.JWT_ACCESSTOKEN_EXPIRESIN,
     jwt_access_secret: process.env.JWT_ACCESSTOKEN_SECRET,
+    store_id: process.env.STORE_ID,
+    secret_key: process.env.SIGNATURE_KEY,
+    payment_url: process.env.PAYMENT_URL,
 };

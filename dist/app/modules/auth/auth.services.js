@@ -26,7 +26,7 @@ const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (exists) {
         throw new AppError_1.default(409, "User Already Exists");
     }
-    const user = payload;
+    const user = Object.assign(Object.assign({}, payload), { role: "user" });
     const result = yield auth_model_1.User.create(user);
     return result;
 });

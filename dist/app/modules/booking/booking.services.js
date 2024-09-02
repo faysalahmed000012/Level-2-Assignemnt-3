@@ -39,6 +39,7 @@ exports.BookingServices = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
+const payment_1 = require("../../utils/payment");
 const auth_model_1 = require("../auth/auth.model");
 const facility_model_1 = require("../facility/facility.model");
 const booking_model_1 = require("./booking.model");
@@ -56,10 +57,14 @@ const createBooking = (token, payload) => __awaiter(void 0, void 0, void 0, func
     const end = +new Date(`1970-01-01T${endTime}`);
     const pricePerHour = yield facility_model_1.Facility.find({ _id: payload.facility }).select("pricePerHour");
     const payableAmount = (((end - start) / (1000 * 60 * 60)) % 24) * pricePerHour[0].pricePerHour;
-    const booking = Object.assign(Object.assign({}, payload), { user: userId._id, payableAmount: payableAmount, isBooked: "confirmed" });
+    console.log(start, end, pricePerHour[0].pricePerHour);
+    const tranId = `TXN-${Date.now()}`;
+    const booking = Object.assign(Object.assign({}, payload), { user: userId._id, payableAmount: payableAmount, isBooked: "unconfirmed", tranId });
     // checking time conflict
     const assignedSchedules = yield booking_model_1.Booking.find({
         date,
+        isBooked: "confirmed",
+        facility: pricePerHour[0]._id,
     }).select("date startTime endTime");
     const newSchedule = {
         date,
@@ -69,11 +74,16 @@ const createBooking = (token, payload) => __awaiter(void 0, void 0, void 0, func
     if ((0, booking_utils_1.hasTimeConflict)(assignedSchedules, newSchedule)) {
         throw new AppError_1.default(409, "Another Slot available this time");
     }
-    const result = booking_model_1.Booking.create(booking);
-    return result;
+    const paymentData = {
+        tranId,
+        payableAmount,
+    };
+    const result = yield booking_model_1.Booking.create(booking);
+    const paymentSession = yield (0, payment_1.initiatePayment)(paymentData);
+    return paymentSession;
 });
 const getAllBookings = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield booking_model_1.Booking.find().lean();
+    const result = yield booking_model_1.Booking.find().populate("facility");
     return result;
 });
 const getBookingByUser = (token) => __awaiter(void 0, void 0, void 0, function* () {
@@ -84,15 +94,22 @@ const getBookingByUser = (token) => __awaiter(void 0, void 0, void 0, function* 
     if (!userId) {
         throw new AppError_1.default(404, "User not found");
     }
-    const booking = yield booking_model_1.Booking.find({ user: userId._id }).populate("facility");
+    const booking = yield booking_model_1.Booking.find({
+        user: userId._id,
+        isBooked: "confirmed",
+    }).populate("facility");
     return booking;
 });
 const cancelBooking = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield booking_model_1.Booking.findOneAndUpdate({ _id: id }, { isBooked: false }, { new: true });
+    const result = yield booking_model_1.Booking.findOneAndUpdate({ _id: id }, { isBooked: "canceled" }, { new: true });
     return result;
 });
-const checkAvailability = (date) => __awaiter(void 0, void 0, void 0, function* () {
-    const bookings = yield booking_model_1.Booking.find({ date, isBooked: "confirmed" });
+const checkAvailability = (date, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const bookings = yield booking_model_1.Booking.find({
+        facility: id,
+        date,
+        isBooked: "confirmed",
+    });
     if (!bookings) {
         return {
             startTime: "0:00",

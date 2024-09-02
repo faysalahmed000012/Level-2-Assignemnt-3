@@ -40,6 +40,10 @@ const facilitySchema = new mongoose_1.Schema({
         type: Number,
         required: true,
     },
+    imgUrl: {
+        type: String,
+        required: false,
+    },
     location: {
         type: String,
         required: true,

@@ -22,7 +22,10 @@ const app = (0, express_1.default)();
 // parsers
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: "https://level-2-assignment-5-client.vercel.app",
+    credentials: true,
+}));
 // application routes
 app.use("/api", routes_1.default);
 const test = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
