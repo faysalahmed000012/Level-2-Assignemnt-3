@@ -19,9 +19,9 @@ const initiatePayment = (paymentData) => __awaiter(void 0, void 0, void 0, funct
     const response = yield axios_1.default.post(config_1.default.payment_url, {
         store_id: config_1.default.store_id,
         tran_id: paymentData.tranId,
-        success_url: `http://localhost:5000/api/payment/confirmation?trnx=${paymentData.tranId}`,
-        fail_url: `http://localhost:5000/api/payment/failed?trnx=${paymentData.tranId}`,
-        cancel_url: `http://localhost:5000/api/payment/failed?trnx=${paymentData.tranId}`,
+        success_url: `https://assignment-3-five-pi.vercel.app/api/payment/confirmation?trnx=${paymentData.tranId}`,
+        fail_url: `https://assignment-3-five-pi.vercel.app/api/payment/failed?trnx=${paymentData.tranId}`,
+        cancel_url: `https://assignment-3-five-pi.vercel.app/api/payment/failed?trnx=${paymentData.tranId}`,
         amount: paymentData.payableAmount,
         currency: "BDT",
         signature_key: config_1.default.secret_key,

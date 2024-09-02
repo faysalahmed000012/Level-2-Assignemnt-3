@@ -19,14 +19,14 @@ const confirmationController = (0, catchAsync_1.default)((req, res) => __awaiter
     const transectionId = req.query.trnx;
     const result = yield payment_service_1.PaymentServices.confirmationService(transectionId);
     if (result) {
-        res.redirect(`http://localhost:5173/payment/success/${transectionId}`);
+        res.redirect(`https://assignment-5-client-gamma.vercel.app/payment/success/${transectionId}`);
     }
 }));
 const failedPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const transactionId = req.query.trnx;
     const result = yield payment_service_1.PaymentServices.failedPayment(transactionId);
     if (result) {
-        res.redirect("http://localhost:5173/payment/failed");
+        res.redirect("https://assignment-5-client-gamma.vercel.app/payment/failed");
     }
 }));
 exports.PaymentController = {

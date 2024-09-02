@@ -21,7 +21,7 @@ const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
 // parsers
 app.use((0, cors_1.default)({
-    origin: "https://level-2-assignment-5-client.vercel.app",
+    origin: "https://assignment-5-client-gamma.vercel.app",
     credentials: true,
 }));
 app.use(express_1.default.json());

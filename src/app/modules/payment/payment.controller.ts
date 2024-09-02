@@ -7,7 +7,9 @@ const confirmationController = catchAsync(async (req, res) => {
     transectionId as string
   );
   if (result) {
-    res.redirect(`http://localhost:5173/payment/success/${transectionId}`);
+    res.redirect(
+      `https://assignment-5-client-gamma.vercel.app/payment/success/${transectionId}`
+    );
   }
 });
 
@@ -15,7 +17,7 @@ const failedPayment = catchAsync(async (req, res) => {
   const transactionId = req.query.trnx;
   const result = await PaymentServices.failedPayment(transactionId as string);
   if (result) {
-    res.redirect("http://localhost:5173/payment/failed");
+    res.redirect("https://assignment-5-client-gamma.vercel.app/payment/failed");
   }
 });
 

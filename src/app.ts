@@ -10,7 +10,7 @@ const app: Application = express();
 // parsers
 app.use(
   cors({
-    origin: "https://level-2-assignment-5-client.vercel.app",
+    origin: "https://assignment-5-client-gamma.vercel.app",
     credentials: true,
   })
 );
