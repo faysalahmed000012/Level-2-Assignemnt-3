@@ -7,12 +7,23 @@ import router from "./app/routes";
 
 const app: Application = express();
 
+const allowedOrigins = ["https://level-2-assignment-5-client.vercel.app"];
+
 // parsers
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://level-2-assignment-5-client.vercel.app/",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, curl requests, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   })
 );
