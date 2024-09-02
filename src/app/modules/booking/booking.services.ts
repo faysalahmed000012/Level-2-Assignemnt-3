@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import AppError from "../../errors/AppError";
+import { initiatePayment } from "../../utils/payment";
 import { User } from "../auth/auth.model";
 import { Facility } from "../facility/facility.model";
 import IBooking from "./booking.interface";
@@ -26,16 +27,21 @@ const createBooking = async (token: string, payload: Partial<IBooking>) => {
   );
   const payableAmount =
     (((end - start) / (1000 * 60 * 60)) % 24) * pricePerHour[0].pricePerHour;
+  console.log(start, end, pricePerHour[0].pricePerHour);
+  const tranId = `TXN-${Date.now()}`;
   const booking = {
     ...payload,
     user: userId._id,
     payableAmount: payableAmount,
-    isBooked: "confirmed",
+    isBooked: "unconfirmed",
+    tranId,
   };
 
   // checking time conflict
   const assignedSchedules = await Booking.find({
     date,
+    isBooked: "confirmed",
+    facility: pricePerHour[0]._id,
   }).select("date startTime endTime");
 
   const newSchedule = {
@@ -48,12 +54,18 @@ const createBooking = async (token: string, payload: Partial<IBooking>) => {
     throw new AppError(409, "Another Slot available this time");
   }
 
-  const result = Booking.create(booking);
-  return result;
+  const paymentData = {
+    tranId,
+    payableAmount,
+  };
+
+  const result = await Booking.create(booking);
+  const paymentSession = await initiatePayment(paymentData);
+  return paymentSession;
 };
 
 const getAllBookings = async () => {
-  const result = await Booking.find().lean();
+  const result = await Booking.find().populate("facility");
   return result;
 };
 
@@ -69,21 +81,28 @@ const getBookingByUser = async (token: string) => {
     throw new AppError(404, "User not found");
   }
 
-  const booking = await Booking.find({ user: userId._id }).populate("facility");
+  const booking = await Booking.find({
+    user: userId._id,
+    isBooked: "confirmed",
+  }).populate("facility");
   return booking;
 };
 
 const cancelBooking = async (id: string) => {
   const result = await Booking.findOneAndUpdate(
     { _id: id },
-    { isBooked: false },
+    { isBooked: "canceled" },
     { new: true }
   );
   return result;
 };
 
-const checkAvailability = async (date: any) => {
-  const bookings = await Booking.find({ date, isBooked: "confirmed" });
+const checkAvailability = async (date: any, id: string) => {
+  const bookings = await Booking.find({
+    facility: id,
+    date,
+    isBooked: "confirmed",
+  });
 
   if (!bookings) {
     return {

@@ -16,10 +16,15 @@ const auth = (...requiredRoles: ["admin" | "user"]) => {
 
     const tokenArray = token?.split(" ");
     // checking if the given token is valid
-    const decoded = jwt.verify(
-      tokenArray[1],
-      config.jwt_access_secret as string
-    ) as JwtPayload;
+    let decoded;
+    try {
+      decoded = jwt.verify(
+        tokenArray[1],
+        config.jwt_access_secret as string
+      ) as JwtPayload;
+    } catch (error) {
+      throw new AppError(401, "Unauthorized");
+    }
 
     const { email, role } = decoded;
 

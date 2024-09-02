@@ -3,8 +3,8 @@ import catchAsync from "../../utils/catchAsync";
 import { FacilityServices } from "./facility.services";
 
 const getAllFacility = async (req: Request, res: Response) => {
-  const facilities = await FacilityServices.getAllFacility();
-  if (facilities.length === 0) {
+  const facilities = await FacilityServices.getAllFacility(req.query);
+  if (!facilities) {
     res.status(400).json({
       success: false,
       statusCode: 404,
@@ -17,6 +17,25 @@ const getAllFacility = async (req: Request, res: Response) => {
     success: true,
     message: "All Facility Retrieved successfully",
     data: facilities,
+  });
+};
+
+const getFacilityById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const facility = await FacilityServices.getFacilityById(id);
+  if (!facility) {
+    res.status(400).json({
+      success: false,
+      statusCode: 404,
+      message: "No Data Found",
+      data: [],
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Facility Retrieved successfully",
+    data: facility,
   });
 };
 
@@ -59,6 +78,7 @@ const deleteFacility = catchAsync(async (req, res) => {
 
 export const FacilityControllers = {
   getAllFacility,
+  getFacilityById,
   createFacility,
   updateFacility,
   deleteFacility,

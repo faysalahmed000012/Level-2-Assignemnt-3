@@ -7,5 +7,6 @@ export default interface IBooking {
   user: any;
   facility: Types.ObjectId;
   payableAmount: number;
+  tranId: string;
   isBooked: "confirmed" | "unconfirmed" | "canceled";
 }

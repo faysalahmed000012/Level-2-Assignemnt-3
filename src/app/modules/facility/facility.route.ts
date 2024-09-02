@@ -8,6 +8,7 @@ import facilityValidationSchema from "./facility.zod.validation";
 const router = Router();
 
 router.get("/", FacilityControllers.getAllFacility);
+router.get("/:id", FacilityControllers.getFacilityById);
 router.post(
   "/",
   auth(USER_ROLE.admin),

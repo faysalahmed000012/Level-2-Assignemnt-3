@@ -1,16 +1,14 @@
 import { Router } from "express";
 import auth from "../../middlewares/auth";
-import validateRequest from "../../middlewares/validateRequest";
 import { USER_ROLE } from "../auth/auth.constants";
 import { BookingControllers } from "./booking.controller";
-import bookingValidationSchema from "./booking.zod.validation";
 
 const router = Router();
 
 router.post(
   "/",
   auth(USER_ROLE.user),
-  validateRequest(bookingValidationSchema),
+  // validateRequest(bookingValidationSchema),
   BookingControllers.createBooking
 );
 

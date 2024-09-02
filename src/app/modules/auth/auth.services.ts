@@ -13,7 +13,7 @@ const createUser = async (payload: IUser) => {
   if (exists) {
     throw new AppError(409, "User Already Exists");
   }
-  const user = payload;
+  const user = { ...payload, role: "user" };
   const result = await User.create(user);
   return result;
 };

@@ -1,8 +1,24 @@
+import QueryBuilder from "../../../builder/queryBuilder";
 import IFacility from "./facility.interface";
 import { Facility } from "./facility.model";
 
-const getAllFacility = async () => {
-  const result = await Facility.find({ isDeleted: false });
+const getAllFacility = async (query: any) => {
+  const facilityQuery = new QueryBuilder(
+    Facility.find({ isDeleted: false }),
+    query
+  )
+    .filter()
+    .paginate();
+
+  const meta = await facilityQuery.countTotal();
+
+  const facilities = await facilityQuery.modelQuery;
+
+  return { facilities, meta };
+};
+
+const getFacilityById = async (id: string) => {
+  const result = await Facility.findOne({ _id: id });
   return result;
 };
 
@@ -29,6 +45,7 @@ const deleteFacility = async (id: string) => {
 
 export const FacilityServices = {
   getAllFacility,
+  getFacilityById,
   createFacility,
   updateFacility,
   deleteFacility,

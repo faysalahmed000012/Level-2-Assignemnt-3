@@ -16,6 +16,10 @@ const facilitySchema = new Schema<IFacility>({
     type: Number,
     required: true,
   },
+  imgUrl: {
+    type: String,
+    required: false,
+  },
   location: {
     type: String,
     required: true,

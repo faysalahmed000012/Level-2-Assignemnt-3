@@ -10,6 +10,7 @@ const createBooking = catchAsync(async (req, res) => {
   const booking = req.body;
   const result = await BookingServices.createBooking(token, booking);
 
+  // console.log(result);
   res.status(201).json({
     success: true,
     statusCode: 201,
@@ -75,8 +76,9 @@ const cancelBooking = catchAsync(async (req, res) => {
 
 const checkAvailability = catchAsync(async (req, res) => {
   const date = req.query.date || new Date().toISOString().slice(0, 10);
-
-  const result = await BookingServices.checkAvailability(date);
+  const id = req.query.facility as string;
+  console.log(req.query);
+  const result = await BookingServices.checkAvailability(date, id);
   if (result.length === 0) {
     res.status(400).json({
       success: false,

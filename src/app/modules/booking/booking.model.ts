@@ -27,6 +27,10 @@ const bookingSchema = new Schema<IBooking>({
     type: Number,
     required: false,
   },
+  tranId: {
+    type: String,
+    required: true,
+  },
   isBooked: {
     type: String,
     required: false,
