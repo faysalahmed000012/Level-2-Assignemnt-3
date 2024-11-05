@@ -11,9 +11,11 @@ const userValidationSchema = zod_1.z.object({
             .min(1, "Email is required"),
         password: zod_1.z.string().min(1, "Password is required"),
         phone: zod_1.z.string().min(1, "Phone number is required"),
-        role: zod_1.z.enum(["admin", "user"], {
+        role: zod_1.z
+            .enum(["admin", "user"], {
             message: "Invalid role. Allowed values: admin, user",
-        }),
+        })
+            .optional(),
         address: zod_1.z.string().min(1, "Address is required"),
     }),
 });
